@@ -34,25 +34,9 @@
           .setTargeting('test', 'lazyload')
           .addService(googletag.pubads());
 
-        // Some examples of ways to enable lazy loading below.
-        // Normally, only one of these methods should be used.
-
-        // A) Enable with defaults.
-        googletag.pubads().enableLazyLoad();
-
-        // B) Enable without lazy fetching. Additional calls override previous
-        // ones.
-        googletag.pubads().enableLazyLoad({fetchMarginPercent: -1});
-
-        // C) Enable lazy loading with...
         googletag.pubads().enableLazyLoad({
-          // Fetch slots within 5 viewports.
-          fetchMarginPercent: 500,
-          // Render slots within 2 viewports.
-          renderMarginPercent: 200,
-          // Double the above values on mobile, where viewports are smaller
-          // and users tend to scroll faster.
-          mobileScaling: 2.0
+          fetchMarginPercent: 1,
+          renderMarginPercent: 1,
         });
 
         // Register event handlers to observe lazy loading behavior.
