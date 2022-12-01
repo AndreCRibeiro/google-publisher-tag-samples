@@ -10,7 +10,7 @@
         googletag.defineSlot('/6355419/Travel', [728, 90], 'div-1')
           .setTargeting('test', 'lazyload')
           .addService(googletag.pubads());
-        googletag.defineSlot('/6355419/Travel', [728, 90], 'div-2')
+        googletag.defineSlot('/6355419/Travel2', [728, 90], 'div-2')
           .setTargeting('test', 'lazyload')
           .addService(googletag.pubads());
         googletag.defineSlot('/6355419/Travel', [728, 90], 'div-3')
@@ -36,6 +36,35 @@
         elem.innerText = 'Yes';
       }
     </script>
+    <script>
+      //load the apstag.js library
+      !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
+      
+      //initialize the apstag.js library on the page to allow bidding
+      apstag.init({
+           pubID: 'xxxx', //enter your pub ID here as shown above, it must within quotes
+           adServer: 'googletag'
+      });
+      apstag.fetchBids({
+           slots: [{
+               slotID: 'div-1', //example: 'div-gpt-ad-1475102693815-0'
+               slotName: '/6355419/Travel', //example: '12345/box-1'
+               sizes: [[728, 90]] //example: [[300,250], [300,600]]
+           },
+           {
+               slotID: 'div-2', //example: 'div-gpt-ad-1475185990716-0'
+               slotName: '/6355419/Travel2', //example: '12345/leaderboard-1'
+               sizes: [[728, 90]] //example: [[728,90]]
+           }],
+           timeout: 2e3
+      }, function(bids) {
+           // set apstag targeting on googletag, then trigger the first GAM request in googletag's disableInitialLoad integration
+           googletag.cmd.push(function(){
+               apstag.setDisplayBids();
+               googletag.pubads().refresh();
+           });
+      }); 
+      </script>
     <style>
       div.ad-slot {
         border-style: dashed;
