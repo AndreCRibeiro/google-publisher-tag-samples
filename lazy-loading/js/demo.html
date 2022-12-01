@@ -34,9 +34,25 @@
           .setTargeting('test', 'lazyload')
           .addService(googletag.pubads());
 
+        // Some examples of ways to enable lazy loading below.
+        // Normally, only one of these methods should be used.
+
+        // A) Enable with defaults.
+        googletag.pubads().enableLazyLoad();
+
+        // B) Enable without lazy fetching. Additional calls override previous
+        // ones.
+        googletag.pubads().enableLazyLoad({fetchMarginPercent: -1});
+
+        // C) Enable lazy loading with...
         googletag.pubads().enableLazyLoad({
-          fetchMarginPercent: 1,
-          renderMarginPercent: 1,
+          // Fetch slots within 5 viewports.
+          fetchMarginPercent: 500,
+          // Render slots within 2 viewports.
+          renderMarginPercent: 200,
+          // Double the above values on mobile, where viewports are smaller
+          // and users tend to scroll faster.
+          mobileScaling: 2.0
         });
 
         // Register event handlers to observe lazy loading behavior.
@@ -48,8 +64,6 @@
           updateSlotStatus(event.slot.getSlotElementId(), 'rendered');
         });
 
-        // Enable SRA and services.
-        googletag.pubads().enableSingleRequest();
         googletag.enableServices();
       });
 
@@ -99,25 +113,38 @@
     </style>
   </head>
   <body>
+
     <!--
        As defined by lazy load settings, initially:
        1. Slot 1 will be fetched and rendered on mobile and desktop.
        2. Slot 2 will be fetched on mobile and desktop, but will not be rendered on desktop.
-       3. Slot 3 will be fetched on mobile and desktop, but rendered on neither.
+       3. Slot 3 will not be fetched or rendered on mobile or desktop.
     -->
 
     <div class="main-content">
-      <div id="div-1" class="ad-slot" style="height: 90px; width: 728px;"></div>
+      <div id="div-1" class="ad-slot" style="height: 90px; width: 728px;">
+        <script>
+          googletag.cmd.push(function() { googletag.display('div-1'); });
+        </script>
+      </div>
 
       <!-- 3 viewport tall div to place next slot 3 viewports away. -->
       <div style="height:300vh"></div>
 
-      <div id="div-2" class="ad-slot" style="height: 90px; width: 728px;"></div>
+      <div id="div-2" class="ad-slot" style="height: 90px; width: 728px;">
+        <script>
+          googletag.cmd.push(function() { googletag.display('div-2'); });
+        </script>
+      </div>
 
       <!-- 9 viewport tall div to place next slot 12 viewports away. -->
       <div style="height:900vh"></div>
 
-      <div id="div-3" class="ad-slot" style="height: 90px; width: 728px;"></div>
+      <div id="div-3" class="ad-slot" style="height: 90px; width: 728px;">
+        <script>
+          googletag.cmd.push(function() { googletag.display('div-3'); });
+        </script>
+      </div>
     </div>
 
     <div class="status-panel">
@@ -147,9 +174,5 @@
         Scroll the container below to lazily load the ad slots.
       </p>
     </div>
-
-    <script>
-      googletag.cmd.push(function() { googletag.display('div-1'); });
-    </script>
   </body>
 </html>
